@@ -3,7 +3,7 @@ import {View,Button,TextInput, ScrollView, StyleSheet} from 'react-native';
 import { Value } from 'react-native-reanimated';
 import firebase from '../firebase/firebase'
 
-const CreateUserScreen = () => {
+const CreateUserScreen = (props) => {
 
     const[state,setstate] = useState({
         name: "",
@@ -19,14 +19,20 @@ const CreateUserScreen = () => {
         if(state.name === ''){
             alert("Por favor ingrese un nombre")
         }else{
-           await firebase.db.collection('users').add({
-              name: state.name,
-              email: state.email,
-              phone: state.phone
-           })
-           alert('Guardado con exito!')
+           try {
+            await firebase.db.collection('users').add({
+                name: state.name,
+                email: state.email,
+                phone: state.phone
+             });
+              //alert('Guardado con exito!')
+           props.navigation.navigate("UsersList");
+           } catch (error) {
+            console.log(error); 
+           }
+          
         }
-    }
+    };
 
     return(
         <ScrollView style={styles.container}>
